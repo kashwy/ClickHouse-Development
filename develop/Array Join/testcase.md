@@ -1,43 +1,10 @@
-# Multiple ARRAY JOIN (Cartesian Product of Arrays) Test Plan    
-
-
-# Table of Contents   
-[Overview](#overview)   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ARRAY JOIN Syntax](#overview01)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Existing issues or blocks](#overview02)   
-[Test process](#TestProcess)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Manual testing](#TestProcess01)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Functional test](#TestProcess02)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Performance test](#TestProcess03)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Integration Tests](#TestProcess04)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Stress test](#TestProcess05)           
-[Test Cases for Multiple Array Join](#test000)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[Description](#test00)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1. Multiple ARRAY JOIN of 2 arrays whithout empty array](#test01)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2. Multiple ARRAY JOIN of 2 arrays whithout empty array  (LEFT JOIN)](#test02)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3. Multiple ARRAY JOIN of 2 arrays with empty array](#test03)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4. Multiple ARRAY JOIN of 2 arrays with empty array (LEFT JOIN case 1)](#test04)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[5. Multiple ARRAY JOIN of 2 arrays with empty array (LEFT JOIN case 2)](#test05)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[6. Multiple ARRAY JOIN of 2 arrays with empty array (LEFT JOIN case 3)](#test06)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[7. Multiple ARRAY JOIN of 2 arrays with alias](#test07)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[8. Multiple ARRAY JOIN of 2 arrays with referring a none exsit alias](#test08)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[9. Multiple ARRAY JOIN of 2 arrays with Nullable array](#test09)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[10. Multiple ARRAY JOIN of 2 arrays with JOIN](#test10)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[11. Multiple ARRAY JOIN of 3 arrays whithout empty array](#test11)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[12. Multiple ARRAY JOIN 2 of 3 arrays](#test12)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[13. Multiple ARRAY JOIN with ARRAY JOIN multiple arrays](#test13)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[14. Multiple ARRAY JOIN with Nested Data Structure](#test14)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[15. Multiple ARRAY JOIN with Nested Data Structure include empty items](#test15)    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[16. Multiple ARRAY JOIN with Nested Data Structure include empty items (LEFT JOIN)](#test16)    
-
-
+# Multiple ARRAY JOIN (Cartesian Product of Arrays) Test Cases    
 
 # Overview:<a name="overview"></a>    
  This is the test plan for the feature of Multiple ARRAY JOIN (cartesian product of arrays)  as described in the [issue #8687](https://github.com/ClickHouse/ClickHouse/issues/8687).
  The test cases and SQLs are based on the description of the issue #8687 and existing ARRAY JOIN behaviour. There may be other syntax .
  
-## &nbsp;&nbsp;&nbsp;&nbsp;ARRAY JOIN Syntax:<a name="overview01"></a>   
-&nbsp;&nbsp;&nbsp;&nbsp;Suggested 3 options of syntax, this test is based on the first option and No limit of the numbers of array for the Multi array join
+## &nbsp;&nbsp;&nbsp;&nbsp;Multiple ARRAY JOIN:<a name="overview01"></a>   
 - INNER JOIN
 1. keyword per array:    
 `ARRAY JOIN` arr1 `ARRAY JOIN` arr2 … `ARRAY JOIN` arrn     
@@ -61,49 +28,7 @@ ARRAY JOIN (arr1, arr2,…arrn) `LEFT ARRAY JOIN` ( arrn+1,…arrm)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This PR [#31796](https://github.com/ClickHouse/ClickHouse/pull/31796) may solve the issue, but it's not mergerd yet.   
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The scenarios in the ticket are not included in this test. if the PR not mereged beofre the we submit, we will add the code and test for the issue.
-
-
-# Test process:<a name="TestProcess"></a>    
-## &nbsp;&nbsp;&nbsp;&nbsp;Manual testing:<a name="TestProcess01"></a>    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Use manual test to verify the correctness of the SQL and result, generate test SQL files for the functional test.    
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Start clickhouse server and clickhouse client    
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change directory to `programs/clickhouse-server` and run it with `./clickhouse-server`.    
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run `programs/clickhouse-client/clickhouse-client`. (in another terminal)    
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run SQLs in the test cases in the client, check the correctness, and save the correct SQL to .sql file    
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If the expected result of a test is a server error. use the following format:    
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`SELECT restaurantid,meals, drinks, d FROM test_multi_array_join ARRAY JOIN meals ARRAY JOIN drinks
-; -- { serverError 42 }` 
-
-## &nbsp;&nbsp;&nbsp;&nbsp;Functional test<a name="TestProcess02"></a>    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each functional test sends one or multiple queries to the running ClickHouse server and compares the result with reference.
-
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create the test files with formated name, The name of the test starts with a five-digit prefix followed by a descriptive name, such as `01847_multiple_array_join_2_arrays.sql`. To choose the prefix, find the largest prefix already present in the directory, and increment it by one.    
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Put the test files create in manual testing in the `tests/queries/0_stateless` directory and then generate .reference file in the following way:    
- `clickhouse-client -n --testmode < 01847_multiple_array_join_2_arrays.sql > 01847_multiple_array_join_2_arrays.reference`
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run th test like:
-`<path to clickhouse-client> tests/clickhouse-test 01847_multiple_array_join_2_arrays`
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Testing a Distributed Query will be added if neceedssary.   
-
-## &nbsp;&nbsp;&nbsp;&nbsp;Performance test<a name="TestProcess03"></a>    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To be added if necessary.   
-
-## &nbsp;&nbsp;&nbsp;&nbsp;Integration Tests<a name="TestProcess04"></a>    
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To be added if necessary.   
-
-## &nbsp;&nbsp;&nbsp;&nbsp;Stress test<a name="TestProcess05"></a>           
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To be added if necessary.    
-
-# Test Cases for Multiple Array Join<a name="test000"></a>    
+   
 
 ## Description:<a name="test00"></a>    
 The test cases are created to cover as much as possible according to the  description of the issue #8687 and existing ARRAY JOIN behaviour.   
