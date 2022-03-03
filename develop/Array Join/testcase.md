@@ -1,35 +1,5 @@
 # Multiple ARRAY JOIN (Cartesian Product of Arrays) Test Cases    
 
-# Overview:<a name="overview"></a>    
- This is the test plan for the feature of Multiple ARRAY JOIN (cartesian product of arrays)  as described in the [issue #8687](https://github.com/ClickHouse/ClickHouse/issues/8687).
- The test cases and SQLs are based on the description of the issue #8687 and existing ARRAY JOIN behaviour. There may be other syntax .
- 
-## &nbsp;&nbsp;&nbsp;&nbsp;Multiple ARRAY JOIN:<a name="overview01"></a>   
-- INNER JOIN
-1. keyword per array:    
-`ARRAY JOIN` arr1 `ARRAY JOIN` arr2 … `ARRAY JOIN` arrn     
-2. different keyword for all arrays:    
-`MULTIARRAY JOIN` arr1, arr2,…., arrn    
-3. use a different format from the muilt array in ARRAY JOIN clause (may not a good idea, easy to confuse)    
-`ARRAY JOIN` ( arr1, arr2,…arrn)    
-- LEFT JOIN support, may look like:    
-1. keyword per array:    
-ARRAY JOIN arr1 `LEFT ARRAY JOIN` arr2 … ARRAY JOIN arrn    
-2. different keyword for all arrays:    
-MULTIARRAY JOIN arr1, arr2,…., arrn `LEFT MULTIARRAY JOIN` arrn+1,…., arrm    
-3. use a different format from the muilt array in ARRAY JOIN clause (may not be a good idea, easy to be confused)    
-ARRAY JOIN (arr1, arr2,…arrn) `LEFT ARRAY JOIN` ( arrn+1,…arrm)    
-- No limit of the numbers of array for the Multi array join   
-
-## &nbsp;&nbsp;&nbsp;&nbsp;Existing issues or blocks:<a name="overview02"></a>   
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Described in this issue: [Describe how identifiers in SELECT queries are resolved #23194](https://github.com/ClickHouse/ClickHouse/issues/23194), some identifier resolving may affect the behaviour of the ARRAY JOIN.   
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This PR [#31796](https://github.com/ClickHouse/ClickHouse/pull/31796) may solve the issue, but it's not mergerd yet.   
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The scenarios in the ticket are not included in this test. if the PR not mereged beofre the we submit, we will add the code and test for the issue.
-   
-
 ## Description:<a name="test00"></a>    
 The test cases are created to cover as much as possible according to the  description of the issue #8687 and existing ARRAY JOIN behaviour.   
 
