@@ -2,7 +2,7 @@
 
 ##  Background
 
-The are Vulnerabilities in some submodules, and the soubmodules need to upgrade to lateset version. Here is the infor about the submodule
+The are Vulnerabilities in some submodules, and the soubmodules need to upgrade to latest version. Here is the info about the submodule
 
 |ClickHouse effected?	|Vulnerability ID	|Library|	Source File	|Severity| upgrade to |  
 |----|----|----|----|----|----|
@@ -94,7 +94,7 @@ The are Vulnerabilities in some submodules, and the soubmodules need to upgrade 
     ```
     /i18n/nounit.cpp
     ```
-8. Make changes the `contrib/icu-cmake/CMakeLists.txt`   
+8. Make changes to the `contrib/icu-cmake/CMakeLists.txt`   
     Add the following to the setting of `ICUUC_SOURCES`   
     ```
     "${ICU_SOURCE_DIR}/common/emojiprops.cpp"
@@ -151,7 +151,7 @@ The are Vulnerabilities in some submodules, and the soubmodules need to upgrade 
         ~/src# cd icudata
         ~/src/icudata# git checkout upgrade_icu_70.1
         ```
-        Copy the data file `icudt70l_dat.S` generated in above step:
+        Copy the data file `icudt70l_dat.S` generated in above step and add to stage:
         ```
         ~/src/icudata# cp ../icu/icu4c/source/data/out/tmp/icudt70l_dat.S ./
         ~/src/icudata# git rm icudt66l_dat.S
@@ -168,7 +168,7 @@ The are Vulnerabilities in some submodules, and the soubmodules need to upgrade 
             modified:   README.md
             renamed:    icudt66l_dat.S -> icudt70l_dat.S    
         ```
-    - Commit and Create PR
+    - Commit and Create PR  
         Commit:
         ```
         ~/src/icudata# git commit
@@ -198,11 +198,32 @@ The are Vulnerabilities in some submodules, and the soubmodules need to upgrade 
 
 10. Update the reference of the icu in project:
     open `docs/en/development/contrib.md`
-    update the reference of icu and icudata:
+    update the reference of icu and icudata:  
+    ```
+    | icu | [Public Domain](https://github.com/unicode-org/icu/blob/a56dde820dc35665a66f2e9ee8ba58e75049b668/icu4c/LICENSE) |   
 
-
+    | icudata | [Public Domain](https://github.com/ClickHouse-Extras/icudata/blob/e378dfcac4deb0c4d8a08f1f2b4d3cf7c930158c/LICENSE) |
+    ```
 
 11. Build the ClickHouse :
+    check what are changed:
+    ```
+    ~/src/ClickHouse# git status
+    On branch upgrade_icu_70.1
+    Your branch is up to date with 'origin/upgrade_icu_70.1'.
+
+    Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git restore <file>..." to discard changes in working directory)
+            modified:   contrib/icu (new commits)
+            modified:   contrib/icu-cmake/CMakeLists.txt
+            modified:   contrib/icudata (new commits)
+            modified:   docs/en/development/contrib.md
+
+    no changes added to commit (use "git add" and/or "git commit -a")    
+    ``` 
+    Now build the clickHouse:
+
     ```
     cd ~/src/ClickHouse
     ~/src/ClickHouse# rm -rf build
@@ -262,6 +283,45 @@ The are Vulnerabilities in some submodules, and the soubmodules need to upgrade 
     All tests have finished.
 
     ```
-13. commit, 
-14. rebase, push, 
-15. PR
+13. Commit the changes   
+    Add the changes to stage:
+    ```
+    ~/src/ClickHouse# git add contrib/icu 
+    ~/src/ClickHouse# git add contrib/icu-cmake/CMakeLists.txt
+    ~/src/ClickHouse# git add contrib/icudata 
+    ~/src/ClickHouse# git add docs/en/development/contrib.md
+    ```
+
+    Commit:
+    ```
+    ~/src/ClickHouse# git commit
+    ```
+    Add Commit Message:
+    ```
+    Upgrade icu to icu-release-70-1 
+
+    upgrade due to vulnerabilities of WS-2019-0513 and CVE-2020-10531        
+    ```
+    Rebase and push:
+
+    **synchronize forked repository** , then rebase:   
+    ```
+    ~/src/ClickHouse# git fetch
+    ~/src/ClickHouse# git rebase origin/master
+    ```    
+    push :
+    ```
+    ~/src/ClickHouse# git push
+    ```      
+    It may show `diverged` after rebase:
+    ```
+     Your branch and 'origin/master' have diverged,
+     ...
+       (use "git pull" to merge the remote branch into yours)    
+    ```
+    we can force to push:
+    ```
+    ~/src/ClickHouse# git push -- force
+    ```
+
+14. Create PR on the Forked repo to ClickHouse:master
