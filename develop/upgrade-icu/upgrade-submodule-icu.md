@@ -321,7 +321,7 @@ The are Vulnerabilities in some submodules, and the soubmodules need to upgrade 
     ```
     we can force to push:
     ```
-    ~/src/ClickHouse# git push -- force
+    ~/src/ClickHouse# git push --force
     ```
 
 14. Create PR on the Forked repo to ClickHouse:master
