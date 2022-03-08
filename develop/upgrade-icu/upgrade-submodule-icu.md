@@ -2,7 +2,7 @@
 
 ##  Background
 
-The are Vulnerabilities in some submodules, and the soubmodules need to upgrade to latest version. Here is the info about the submodule
+The are Vulnerabilities in some submodules, and the submodules need to upgrade to latest version. Here is the info about the submodule
 
 |ClickHouse effected?	|Vulnerability ID	|Library|	Source File	|Severity| upgrade to |  
 |----|----|----|----|----|----|
