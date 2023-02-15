@@ -1,0 +1,29 @@
+
+
+KQL :                                                   CH
+strcat(argument1, argument2[, argumentN])               concat(s1, s2, ...)
+
+strrep(value,multiplier,[delimiter])                    repeat(value,multiplier)
+
+strrep ('a',3) => 'aaa'                                 repeat('a',3) =>'aaa'
+
+strrep ('a',3,'_') => 'a_a_a'                           repeat('a',3) ?  =>'a_a_a'  ==  'a_a_' +'a'
+                                                            concat( repeat( concat('a','_'),3 -1),'a') 
+                                                        'a_a_a'  ==  substr('a_a_a_',1,length('a_a_a_') - length('_')
+
+
+
+strcat('a.',strrep('b' , 3,'-')) as c1,strrep(strcat('b','_','c,'),3) as c2
+
+
+Customers|project strcat('a.',strrep('b' , 3,'-')) as c1,strrep(strcat('b','_','c,'),3) as c2
+
+Customers|project strcat('a.',strrep('b' , 3,'-')) as c1,strrep(strcat('b','_','c,'),3,'*') as c2
+
+Customers|project strcat(FirstName,strrep('b' , 3,'-')) as c1, strrep(strcat(FirstName,'_',LastName,' '),2) as c2
+
+Customers|project strcat('a.',strrep('b' , strlen(strrep('x',4)),'-')) as c1,strrep(strcat('b','_','c,'),3) as c2
+
+
+Customers|project substring('12345',2,2)
+Customers|project substring('12345',2)
