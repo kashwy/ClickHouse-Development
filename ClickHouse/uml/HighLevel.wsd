@@ -1,0 +1,9 @@
+@startuml
+->TCPHandler++: SQL from client
+TCPHandler->parser++
+parser->SyntaxAnalyzer--++:AST
+SyntaxAnalyzer->QueryAnalyzer--++: optimized AST
+QueryAnalyzer->Executor--++:query_plan
+TCPHandler<--Executor--: Block stream
+<--TCPHandler--: result
+@enduml

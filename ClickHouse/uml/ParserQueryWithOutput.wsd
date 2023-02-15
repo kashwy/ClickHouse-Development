@@ -1,0 +1,14 @@
+@startuml
+ -> "ParserSelectWithUnionQuery::parseImpl"++: ASTPtr & node
+
+ "ParserSelectWithUnionQuery::parseImpl"->"ParserUnionList::parse"++
+ "ParserUnionList::parse"->"ParserUnionQueryElement::parse"++
+ "ParserUnionQueryElement::parse"->"ParserSubquery::parse"++
+ "ParserSubquery::parse"->"ParserSelectQuery().parse"--++
+ "ParserUnionQueryElement::parse"<--"ParserSelectQuery().parse"--:filled ASTPtr node
+
+ "ParserUnionList::parse"<--"ParserUnionQueryElement::parse"--
+ "ParserSelectWithUnionQuery::parseImpl"<--"ParserUnionList::parse"--
+
+<--"ParserSelectWithUnionQuery::parseImpl"--: filled node (ASTPtr) if success
+@enduml

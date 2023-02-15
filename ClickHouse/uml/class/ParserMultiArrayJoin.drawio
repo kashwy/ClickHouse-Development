@@ -1,0 +1,47 @@
+<mxfile host="65bd71144e">
+    <diagram id="Izhh5dfN6ve_7SJ78NsY" name="Page-1">
+        <mxGraphModel dx="1153" dy="739" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="8" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;rounded=0;strokeColor=#000000;" parent="1" source="2" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="ParseMultiArrayJoin" style="verticalLabelPosition=middle;verticalAlign=middle;html=1;shape=process;whiteSpace=wrap;rounded=0;size=0.14;arcSize=6;labelPosition=center;align=center;strokeColor=#000000;fontColor=#000000;labelBackgroundColor=none;labelBorderColor=none;fillColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="50" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;rounded=0;strokeColor=#000000;" parent="1" source="3" target="4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="check children of&amp;nbsp;&lt;br&gt;ASTTAbleInSelectQuery" style="rounded=0;whiteSpace=wrap;html=1;absoluteArcSize=1;arcSize=14;strokeWidth=2;labelBackgroundColor=none;align=left;strokeColor=#000000;fontColor=#000000;labelBorderColor=none;fillColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="187.5" y="140" width="145" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Yes" style="edgeStyle=none;html=1;rounded=0;strokeColor=#000000;fontColor=#000000;labelBackgroundColor=none;labelBorderColor=default;" parent="1" source="4" target="5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="No" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;rounded=0;strokeColor=#000000;fontColor=#000000;labelBackgroundColor=none;labelBorderColor=default;" parent="1" source="4" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="260" y="340" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value="count(array jooin) &amp;gt;1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.decision;whiteSpace=wrap;rounded=0;strokeColor=#000000;fontColor=#000000;labelBackgroundColor=none;labelBorderColor=none;fillColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="185" y="210" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="" style="edgeStyle=none;html=1;rounded=0;strokeColor=#000000;" parent="1" source="5" target="11" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="build ASTMultiArrayJoin from&amp;nbsp; all ASTArrayJoin" style="whiteSpace=wrap;html=1;strokeWidth=2;rounded=0;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="220" width="292.5" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;rounded=0;strokeColor=#000000;" parent="1" source="11" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="270" y="319" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="11" value="update ASTArrayJoin with single ASTMultiArryJoin" style="whiteSpace=wrap;html=1;strokeWidth=2;rounded=0;strokeColor=#000000;fontColor=#000000;labelBackgroundColor=none;labelBorderColor=none;fillColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="299" width="292.5" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

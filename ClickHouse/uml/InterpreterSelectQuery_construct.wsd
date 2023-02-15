@@ -1,0 +1,24 @@
+@startuml
+!theme plain
+->"InterpreterSelectQuery::()"++:AST
+"InterpreterSelectQuery::()"->analyze++: shouldMoveToPrewhere ?
+analyze->"TreeRewriter.analyzeSelect()"++:
+"TreeRewriter.analyzeSelect()"->"TreeRewriter.analyzeSelect()": call <font color=green><b>getMultiArrayJoinedColumns
+analyze<-"TreeRewriter.analyzeSelect()"--:<font color=green><b>TreeRewriterResult
+analyze->analyze:query_analyzer:\nSelectQueryExpressionAnalyzer
+analyze->"ExpressionAnalysisResult::()"++:query_analyzer
+
+"ExpressionAnalysisResult::()"->"SelectQueryExpressionAnalyzer::appendMultiArrayJoin"++:query_analyzer
+"SelectQueryExpressionAnalyzer::appendMultiArrayJoin"->"SelectQueryExpressionAnalyzer::appendMultiArrayJoin" : generate <font color=green><b>MultiArrayJoinAction\nby using <font color=green><b>TreeRewriterResult
+"SelectQueryExpressionAnalyzer::appendMultiArrayJoin"->"SelectQueryExpressionAnalyzer::appendMultiArrayJoin" : generate <font color=green><b>internal MultiArrayJoinStep\nwith object <font color=green><b>MultiArrayJoinAction
+"SelectQueryExpressionAnalyzer::appendMultiArrayJoin"->"SelectQueryExpressionAnalyzer::appendMultiArrayJoin" : push <font color=green><b>MultiArrayJoinStep</font> to chain
+"ExpressionAnalysisResult::()"<-"SelectQueryExpressionAnalyzer::appendMultiArrayJoin"--:MultiArrayJoinAction
+
+"ExpressionAnalysisResult::()"->"ExpressionAnalysisResult::()":call finalize_chain 
+
+analyze<-"ExpressionAnalysisResult::()"--:<font color=green><b>ExpressionAnalysisResult , MultiArrayJoinAction
+
+"InterpreterSelectQuery::()"<-analyze--:<font color=green><b>ExpressionAnalysisResult\n<font color=green><b>MultiArrayJoinAction
+
+<--"InterpreterSelectQuery::()"--
+@enduml

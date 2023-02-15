@@ -1,0 +1,24 @@
+@startuml
+
+->parseQuery++:(ParserQuery::)
+parseQuery->tryParseQuery++: (ParserQuery::parser)... 
+parseQuery<--tryParseQuery--:ast
+
+parseQuery->parser.parse++: (token_iterator)
+parser.parse->"ParserQuery::parseImpl"++
+
+parser.parse<--"ParserQuery::parseImpl"--
+note right
+ParserQueryWithOutput ::parse()
+|| ParserInsertQuery::parse()
+|| ParserUseQuery::parse()
+|| ParserSetQuery::parse()
+|| ParserSystemQuery::parse()
+|| ParserCreateUserQuery::parse()
+|| ParserCreateRoleQuery::parse()
+...
+end note
+parseQuery<--parser.parse--:
+<--parseQuery:ast
+rnote over parseQuery#LightSkyBlue:parseQuery.cpp
+@enduml

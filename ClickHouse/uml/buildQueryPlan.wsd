@@ -1,0 +1,28 @@
+@startuml
+ participant "InterpreterSelectQuery::buildQueryPlan" as buildQueryPlan
+
+->buildQueryPlan++:(QueryPlan & query_plan)
+buildQueryPlan->executeImpl++:query_plan, input_pipe
+executeImpl->executeImpl: (AST) query = getSelectQuery() 
+executeImpl->executeImpl: expressions = analysis_result;\n check if theres wherem having etc
+
+executeImpl->executeFetchColumns++:
+executeFetchColumns->executes...--++
+executeImpl<--executes...--
+note right
+   executeWhere(...);
+   executeAggregation(...);
+   executeDistinct(...);
+   ...
+   query_plan.addStep(std::move(array_join_step));
+end note
+buildQueryPlan<--executeImpl--:from_stage, query_plan
+<--buildQueryPlan--:void (query_plan updated)
+@enduml
+
+
+/'
+
+executeFetchColumns(from_stage, query_plan);
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Interpreters/InterpreterSelectQuery.cpp.html#1037
+'/

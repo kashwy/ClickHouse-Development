@@ -1,0 +1,24 @@
+@startuml
+ ->"TCPHandler::runImpl": Query Request
+ activate "TCPHandler::runImpl"
+ "TCPHandler::runImpl"->receivePacket++
+ receivePacket->"executeQuery*"--++
+
+"executeQuery*"->"process Query"--++ :"BlockIO::state.io"
+/'alt#Gold #LightBlue state.io.pipeline.pushing() 
+    "process Query" -> "processInsertQuery"++: processInsertQuery
+    "process Query" <-- "processInsertQuery"--
+else #LightPink state.io.pipeline.pulling()
+    "process Query" -> "processOrdinaryQueryWithProcessors"++: processOrdinaryQueryWithProcessors
+    "process Query" <-- "processOrdinaryQueryWithProcessors"--
+else #LightYellow state.io.pipeline.completed()
+    "process Query" -> "CompletedPipelineExecutor::execute"++: CompletedPipelineExecutor::execute
+    "process Query" <-- "CompletedPipelineExecutor::execute"--
+end
+'/
+"TCPHandler::runImpl"<--"process Query"--:BlockIO
+ note over "executeQuery*"#LightBlue
+ parse SQL, optmization, execute
+ endnote
+<--"TCPHandler::runImpl": Result
+@enduml
