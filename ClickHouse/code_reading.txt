@@ -1,0 +1,39 @@
+
+std::unique_ptr<QueryPlan> createLocalPlan(
+SetPtr ActionsMatcher::makeSet(const ASTFunction & node, Data & data, bool no_subqueries)
+static std::unique_ptr<QueryPlan> buildJoinedPlan(
+QueryPipelineBuilder IInterpreterUnionOrSelectQuery::buildQueryPipeline()
+QueryPipeline InterpreterExplainQuery::executeImpl()
+
+
+//void    InterpreterSelectIntersectExceptQuery::buildQueryPlan(QueryPlan & query_plan)
+//BlockIO InterpreterSelectIntersectExceptQuery::execute()
+void InterpreterSelectQuery::executeFetchColumns(QueryProcessingStage::Enum processing_stage, QueryPlan & query_plan) -->(interpreter_subquery->buildQueryPlan(query_plan);)
+
+
+bool isStorageTouchedByMutations(->BlockIO InterpreterSelectQuery::execute()
+
+	InterpreterSelectQuery::buildQueryPlan(QueryPlan & query_plan)
+		void InterpreterSelectQuery::executeImpl(QueryPlan & query_plan, std::optional<Pipe> prepared_pipe)
+		
+		
+		
+		
+		
+BlockIO InterpreterSelectQuery::execute()
+{
+    BlockIO res;
+    QueryPlan query_plan;
+    buildQueryPlan(query_plan);
+    res.pipeline = QueryPipelineBuilder::getPipeline(std::move(*query_plan.buildQueryPipeline(
+        QueryPlanOptimizationSettings::fromContext(context), BuildQueryPipelineSettings::fromContext(context))));
+    return res;
+}
+
+
+void ArrayJoinAction::execute(Block & block)
+
+
+query_plan. nodes
+
+executeFetchColumns

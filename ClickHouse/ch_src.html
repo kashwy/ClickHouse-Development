@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>ClickHouse Source</h1>
+<h2>ClickHouse Source</h2>
+<p>The onclick event triggers a function when an element is clicked on.</p>
+<p>input the source </p>
+<button onclick="paste()">clear</button>
+<table>
+<p>
+<tr>
+<td  align="left"><input  style="BACKGROUND-COLOR: #FFFFA0"  id ="desturl" name="fromurl" size="30">
+<button onclick="myFunction()">Click me</button>
+</tr>
+<tr>
+  <td  align="left"><input  style="BACKGROUND-COLOR: #FFFFA0"  id ="desturl2" name="fromurl" size="30">
+  <button onclick="myFunction2()">Click me 2</button>
+  </tr>
+<p id="demo"></p>
+</table>
+<script>
+function paste() {
+document.getElementById('desturl').value="";
+document.getElementById('desturl2').value="";
+//var text = window.clipboardData.getData('Text');
+//document.getElementById("demo").innerHTML = text;
+}
+function myFunction() {
+  /*var url = "https://clickhouse.com/codebrowser/html_report/ClickHouse/src/index.html";*/
+  var val = document.getElementById('desturl').value ;
+  var url = "https://clickhouse.com/codebrowser/html_report/ClickHouse/"+val.trim()+".html";
+  document.getElementById("demo").innerHTML = url;
+ window.open(url, '_blank').focus();
+}
+function myFunction2() {
+  /*var url = "https://clickhouse.com/codebrowser/html_report/ClickHouse/src/index.html";*/
+  var val = document.getElementById('desturl2').value ;
+  var url = "https://clickhouse.com/codebrowser/ClickHouse/"+val.trim()+".html";
+  document.getElementById("demo").innerHTML = url;
+ window.open(url, '_blank').focus();
+}
+
+</script>
+</body>
+</html>
+
