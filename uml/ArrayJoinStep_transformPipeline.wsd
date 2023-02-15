@@ -1,0 +1,11 @@
+@startuml
+participant "ArrayJoinStep::transformPipeline" as transformPipeline
+->transformPipeline++:QueryPipelineBuilder & pipeline
+ transformPipeline->transformPipeline:make instance of ArrayJoinTransform
+ transformPipeline->pipeline.addSimpleTransform
+@enduml
+/'
+
+class ArrayJoinTransform : public ISimpleTransform: public IProcessor
+
+'/

@@ -1,0 +1,50 @@
+@startuml
+ ->executeQuery++: Query string
+executeQuery->executeQuery:ASTPtr ast, BlockIO streams
+executeQuery->executeQueryImpl++: query string, context ...
+executeQueryImpl->executeQueryImpl:ParserQuery parser (create a parser)
+executeQueryImpl->parseQuery++:(parser)
+
+'executeQueryImpl<--parseQuery--++: ast
+parseQuery->"InterpreterFactory::get"--++:ast
+note over "InterpreterFactory::get"
+InterpreterSelectQuery for select Query
+end note
+"InterpreterFactory::get"->"interpreter->execute()"--++:interpreter 
+
+executeQueryImpl<--"interpreter->execute()"--:BlockIO
+executeQuery<--executeQueryImpl--: <ast, streams>
+
+<--executeQuery--: BlockIO
+rnote over executeQuery,executeQueryImpl#LightSteelBlue:executeQuery.cpp
+/rnote over "interpreter->execute()"#LightSteelBlue:InterpreterSelectQuery::execute(..)
+@enduml
+
+/'
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Interpreters/executeQuery.cpp.html#_ZN2DB12executeQueryERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEENS0_10shared_ptrINS_7ContextEEEbNS_20QueryProcessingStage4EnumE
+BlockIO executeQuery(
+    const String & query,
+    ContextMutablePtr context, // connection_context in the TCPHandler method, parameter configured when Query is running.
+    bool internal,
+    QueryProcessingStage::Enum stage)
+{
+    ASTPtr ast;
+    BlockIO streams;
+    std::tie(ast, streams) = executeQueryImpl(query.data(), query.data() + query.size(), context, internal, stage, nullptr);
+    if (const auto * ast_query_with_output = dynamic_cast<const ASTQueryWithOutput *>(ast.get()))
+    {
+        String format_name = ast_query_with_output->format
+                ? getIdentifierName(ast_query_with_output->format)
+                : context->getDefaultFormat();
+        if (format_name == "Null")
+            streams.null_format = true;
+    }
+    return streams;
+}
+
+
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Interpreters/executeQuery.cpp.html#421
+
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Interpreters/executeQuery.cpp.html#606
+
+'/

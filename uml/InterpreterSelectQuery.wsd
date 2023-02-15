@@ -1,0 +1,83 @@
+@startuml
+/'
+The buildQueryPlan(query_plan) method will generate a logical tree, namely QueryPlan, based on the parsed and adjusted AST tree, which is actually a QueryPlanStep tree. For their introduction, see the relevant classes at the end.
+The buildQueryPlan(...) method uses the executeImpl(...) method internally to collect the information on the nodes in the AST tree from top to bottom according to different operation types, and create QueryPlanStep objects one by one. , added to QueryPlan
+'/
+->"InterpreterSelectQuery::execute"++:void
+"InterpreterSelectQuery::execute"->"InterpreterSelectQuery::execute":  BlockIO (res) \nQueryPlan (query_plan)
+"InterpreterSelectQuery::execute"->"buildQueryPlan(executeImpl)"++:( QueryPlan::query_plan)
+note right
+ query_plan.addStep (ReadNothingStep)
+ ...
+ query_plan.addStep (ArrayJoinStep)
+ ...
+end note
+'When the conversion of the entire QueryPlan tree is completed, only an optimized logical plan tree is generated, and the logical tree needs to be converted into a physical plan tree before the execution can really start, and the work of this step is done by QueryPlan::buildQueryPipeline () method completed.
+"buildQueryPlan(executeImpl)"->" QueryPlan::buildQueryPipeline"--++
+rnote over "IQueryPlanStep::updatePipeline"#lightblue:ITransformingStep::updatePipeline
+" QueryPlan::buildQueryPipeline"->"IQueryPlanStep::updatePipeline"++
+note right
+eg:  ITransformingStep::updatePipeline (ArrayJoinStep)
+rnote over ITransformingStep::updatePipeline
+end note
+"IQueryPlanStep::updatePipeline"->"ArrayJoinStep::transformPipeline"
+" QueryPlan::buildQueryPipeline"<--"IQueryPlanStep::updatePipeline"--:last_pipeline
+
+"InterpreterSelectQuery::execute"<--" QueryPlan::buildQueryPipeline"--: BlockIO::pipeline
+<--"InterpreterSelectQuery::execute"--:BlockIO
+rnote over "InterpreterSelectQuery::execute","buildQueryPlan(executeImpl)" #LightSteelBlue:"InterpreterSelectQuery.cpp
+@enduml
+
+/'
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Interpreters/InterpreterSelectQuery.cpp.html#595
+
+QueryPlan::buildQueryPipeline:
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Processors/QueryPlan/QueryPlan.cpp.html#138
+
+
+QueryPipelineBuilderPtr QueryPlan::buildQueryPipeline(
+    const QueryPlanOptimizationSettings & optimization_settings,
+    const BuildQueryPipelineSettings & build_pipeline_settings)
+{
+    checkInitialized();
+    optimize(optimization_settings);
+    struct Frame
+    {
+        Node * node = {};
+        QueryPipelineBuilders pipelines = {};
+    };
+    QueryPipelineBuilderPtr last_pipeline;
+    std::stack<Frame> stack;
+    stack.push(Frame{.node = root});
+    while (!stack.empty())
+    {
+        auto & frame = stack.top();
+        if (last_pipeline)
+        {
+            frame.pipelines.emplace_back(std::move(last_pipeline));
+            last_pipeline = nullptr; //-V1048
+        }
+        size_t next_child = frame.pipelines.size();
+        if (next_child == frame.node->children.size())
+        {
+            bool limit_max_threads = frame.pipelines.empty();
+            last_pipeline = frame.node->step->updatePipeline(std::move(frame.pipelines), build_pipeline_settings);
+            if (limit_max_threads && max_threads)
+                last_pipeline->limitMaxThreads(max_threads);
+            stack.pop();
+        }
+        else
+            stack.push(Frame{.node = frame.node->children[next_child]});
+    }
+    for (auto & context : interpreter_context)
+        last_pipeline->addInterpreterContext(std::move(context));
+    return last_pipeline;
+}
+
+
+
+ITransformingStep::updatePipeline
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Processors/QueryPlan/ITransformingStep.cpp.html#39
+
+
+'/

@@ -1,0 +1,28 @@
+@startuml
+ -> "ParserSelectQuery::parseImpl"++: ASTPtr & node
+
+ "ParserSelectQuery::parseImpl"->"do parsing"++
+rnote right/
+WITH expr_list
+SELECT [ALL/DISTINCT [ON (expr_list)]] [TOP N [WITH TIES]] expr_list
+FROM database.table or FROM table or FROM (subquery) or FROM tableFunction(...)
+     **(ParserTablesInSelectQuery().parse)**
+PREWHERE expr
+WHERE expr
+GROUP BY expr list
+WITH ROLLUP, CUBE, GROUPING SETS or TOTALS
+WITH TOTALS
+HAVING expr
+WINDOW clause
+ORDER BY expr ASC|DESC COLLATE 'locale' list
+LIMIT length | LIMIT offset, length | LIMIT count BY expr-list | LIMIT offset, length BY expr-list
+OFFSET offset_row_count {ROW | ROWS} FETCH {FIRST | NEXT} fetch_row_count {ROW | ROWS} {ONLY | WITH TIES}
+DISTINCT ON and LIMIT BY are mutually exclusive, checked before
+LIMIT length [WITH TIES] | LIMIT offset, length [WITH TIES]
+WITH TIES was used without ORDER BY
+SETTINGS key1 = value1, key2 = value2, ...
+end note
+ "ParserSelectQuery::parseImpl"<--"do parsing"--
+
+<--"ParserSelectQuery::parseImpl"--: filled node (ASTPtr) if success
+@enduml

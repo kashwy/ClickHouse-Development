@@ -1,0 +1,20 @@
+@startuml
+-->"ParserTablesInSelectQuery::parseImpl"++: ASTPtr & node
+"ParserTablesInSelectQuery::parseImpl" -> "ParserTablesInSelectQueryElement::parse"++
+"ParserTablesInSelectQueryElement::parse"->"ParserArrayJoin::parse"++
+"ParserArrayJoin::parse"->"ParserExpressionList::parse"++
+"ParserArrayJoin::parse"<-"ParserExpressionList::parse"-- 
+
+"ParserTablesInSelectQueryElement::parse"<-"ParserArrayJoin::parse"--
+"ParserTablesInSelectQuery::parseImpl" <- "ParserTablesInSelectQueryElement::parse"--
+<--"ParserTablesInSelectQuery::parseImpl"--:filled node
+note over "ParserArrayJoin::parse"#LightSteelBlue: ParserTablesInSelectQuery.cpp
+/note over "ParserExpressionList::parse"#LightSteelBlue:ExpressionListParsers.cpp
+
+@enduml
+/'
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Parsers/ParserTablesInSelectQuery.cpp.html#19
+
+https://clickhouse.com/codebrowser/html_report/ClickHouse/src/Parsers/ParserTablesInSelectQuery.cpp.html#132
+'/
+
