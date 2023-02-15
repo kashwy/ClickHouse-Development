@@ -60,6 +60,9 @@ new feature will produce cartesian product of arrays (`arr1 x arr2`):
 # Implementation<a name="implementation"></a>
 
 ## Description<a name="description"></a>
+
+**simplified design:**
+
 **The basic idea is to follow the logic current ARRAY JOIN, use a different class or struct to implement the functionality. In this way, we can have minmum impacts on current behavior of ARRAY Join.**
 
 ARRAY JOIN (Multi ARRAY JOIN) clause is a part select query, involved in the following stages of Select Query process:  
