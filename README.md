@@ -1,13 +1,11 @@
 # ClickHouse-Development
 
-type $env:USERPROFILE\.ssh\id_rsa.pub | ssh root@9.30.56.13  "cat >> .ssh/authorized_keys"
+type $env:USERPROFILE\.ssh\id_rsa.pub | ssh root@ip  "cat >> .ssh/authorized_keys"
 
-type $env:USERPROFILE\.ssh\id_rsa.pub | ssh root@9.30.199.125  "cat >> .ssh/authorized_keys"
+type $env:USERPROFILE\.ssh\id_rsa.pub | ssh root@ip  "cat >> .ssh/authorized_keys"
 
 
-The system has been registered with ID: ac1f654d-053c-4c89-b2f5-cf64f57cdde1
-The registered system name is: LAPTOP-J9IHQH85
-
+ 
 
 subscription
 
